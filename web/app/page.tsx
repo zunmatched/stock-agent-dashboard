@@ -30,6 +30,9 @@ export default function HomePage() {
       <p>
         <Link href="/calls">→ 決策稽核鏈（個股 call 的完整脈絡與結果）</Link>
       </p>
+      <p>
+        <Link href="/rules">→ 規則驗證 / Regime 趨勢</Link>
+      </p>
 
       {error && <p className="warning">讀取失敗：{error}</p>}
 

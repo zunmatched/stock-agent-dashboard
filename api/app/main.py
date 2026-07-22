@@ -3,12 +3,13 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
-from app.routers import calls, health
+from app.routers import calls, health, rules
 
 app = FastAPI(title="stock-agent-dashboard API")
 
 app.include_router(health.router)
 app.include_router(calls.router)
+app.include_router(rules.router)
 
 
 @app.get("/api/ping")

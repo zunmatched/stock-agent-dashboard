@@ -99,6 +99,43 @@ export type CallsSummary = {
   by_signal_tag: CallSummaryRow[];
 };
 
+export type HistoricalStats = {
+  window: string;
+  sample_n: number;
+  win_rate: number;
+  expectancy_pct: number;
+  edge_vs_baseline: number;
+  verdict: string;
+};
+
+export type RuleSummary = {
+  rule_name: string;
+  display_name: string;
+  description: string;
+  historical: HistoricalStats;
+  regime_run_date: string | null;
+  regime_sample_n: number | null;
+  regime_win_rate: number | null;
+  regime_edge_vs_baseline: number | null;
+};
+
+export type RegimeHistoryPoint = {
+  run_date: string;
+  sample_n: number;
+  win_rate: number | null;
+  avg_excess: number | null;
+  edge_vs_baseline: number | null;
+};
+
+export type PredictionAccuracyRow = {
+  trade_date: string;
+  session: string;
+  predicted_direction: string | null;
+  confidence: number | null;
+  actual_direction: string | null;
+  is_correct: boolean | null;
+};
+
 async function getJSON<T>(path: string): Promise<T> {
   const res = await fetch(`${API_BASE}${path}`, { cache: "no-store" });
   if (!res.ok) {
@@ -123,4 +160,9 @@ export const api = {
   },
   callDetail: (id: number) => getJSON<CallDetail>(`/api/calls/${id}`),
   callsSummary: () => getJSON<CallsSummary>("/api/calls/summary"),
+  rules: () => getJSON<RuleSummary[]>("/api/rules"),
+  ruleHistory: (ruleName: string) =>
+    getJSON<RegimeHistoryPoint[]>(`/api/rules/${encodeURIComponent(ruleName)}/history`),
+  predictionAccuracy: (days = 30) =>
+    getJSON<PredictionAccuracyRow[]>(`/api/prediction-accuracy?days=${days}`),
 };
