@@ -127,6 +127,24 @@ export type RegimeHistoryPoint = {
   edge_vs_baseline: number | null;
 };
 
+export type GraphNode = {
+  id: string;
+  label: string;
+  display_name: string;
+};
+
+export type GraphEdge = {
+  source_id: string;
+  target_id: string;
+  rel_type: string;
+  edge_label: string | null;
+};
+
+export type Graph = {
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+};
+
 export type PredictionAccuracyRow = {
   trade_date: string;
   session: string;
@@ -165,4 +183,5 @@ export const api = {
     getJSON<RegimeHistoryPoint[]>(`/api/rules/${encodeURIComponent(ruleName)}/history`),
   predictionAccuracy: (days = 30) =>
     getJSON<PredictionAccuracyRow[]>(`/api/prediction-accuracy?days=${days}`),
+  graph: () => getJSON<Graph>("/api/graph"),
 };

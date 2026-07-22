@@ -33,6 +33,9 @@ export default function HomePage() {
       <p>
         <Link href="/rules">→ 規則驗證 / Regime 趨勢</Link>
       </p>
+      <p>
+        <Link href="/graph">→ 供應鏈 / ETF / 競爭 / 事件影響圖</Link>
+      </p>
 
       {error && <p className="warning">讀取失敗：{error}</p>}
 
