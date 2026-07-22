@@ -1,0 +1,14 @@
+[Unit]
+Description=stock-agent-dashboard API
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=dashboarduser
+WorkingDirectory=/home/dashboarduser/stock-agent-dashboard/api
+ExecStart=/home/dashboarduser/stock-agent-dashboard/api/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

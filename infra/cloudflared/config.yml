@@ -1,0 +1,7 @@
+tunnel: dashboard
+credentials-file: /home/dashboarduser/.cloudflared/<tunnel-id>.json
+
+ingress:
+  - hostname: dashboard.<你的網域>
+    service: http://127.0.0.1:8000
+  - service: http_status:404
