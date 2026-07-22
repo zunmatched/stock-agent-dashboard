@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 import { api, type HealthOverview, type NewsSourceRun } from "@/lib/api";
 import { JobStatusList } from "@/components/JobStatusList";
@@ -25,6 +26,9 @@ export default function HomePage() {
       <h1>stock_agent — 管線健康儀表板</h1>
       <p className="muted">
         一個私有台股分析系統的唯讀觀測面板：排程 job 是否正常執行、各新聞來源的抓取健康度。
+      </p>
+      <p>
+        <Link href="/calls">→ 決策稽核鏈（個股 call 的完整脈絡與結果）</Link>
       </p>
 
       {error && <p className="warning">讀取失敗：{error}</p>}
