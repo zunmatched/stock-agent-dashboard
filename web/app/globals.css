@@ -210,6 +210,39 @@ body {
   margin-bottom: 0.5rem;
 }
 
+.daily-weekday {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.daily-pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1.25rem 0;
+  font-size: 0.9rem;
+}
+
+.daily-pager button {
+  padding: 0.35rem 0.9rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.daily-pager button:hover:not(:disabled) {
+  background: #f3f4f6;
+}
+
+.daily-pager button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .daily-session-card {
   border: 1px solid #e5e7eb;
   border-radius: 0.75rem;
@@ -441,6 +474,14 @@ body {
   }
   .review-toggle-btn:hover {
     color: #c7d2fe;
+  }
+  .daily-pager button {
+    background: #18181b;
+    border-color: #3f3f46;
+    color: #e4e4e7;
+  }
+  .daily-pager button:hover:not(:disabled) {
+    background: #27272a;
   }
 }
 

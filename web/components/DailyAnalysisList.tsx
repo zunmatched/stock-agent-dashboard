@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import type { PredictionAccuracyRow } from "@/lib/api";
 
@@ -11,6 +11,16 @@ const DIRECTION_LABEL: Record<string, string> = {
 };
 
 const SESSION_ORDER: Record<string, number> = { "08:00": 0, "18:30": 1 };
+
+const WEEKDAY_LABEL = ["日", "一", "二", "三", "四", "五", "六"];
+
+// 用 UTC 組日期避免字串直接丟給 Date() 解析時被當地時區偏移，算出錯誤的星期幾
+function weekdayLabel(dateStr: string): string {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  return WEEKDAY_LABEL[new Date(Date.UTC(y, m - 1, d)).getUTCDay()];
+}
+
+const DATES_PER_PAGE = 10;
 
 function ResultBadge({ row }: { row: PredictionAccuracyRow }) {
   if (row.is_correct === null) {
@@ -78,34 +88,76 @@ function SessionCard({ row }: { row: PredictionAccuracyRow }) {
   );
 }
 
+function Pager({
+  page,
+  pageCount,
+  onChange,
+}: {
+  page: number;
+  pageCount: number;
+  onChange: (p: number) => void;
+}) {
+  if (pageCount <= 1) return null;
+  return (
+    <div className="daily-pager">
+      <button type="button" disabled={page === 0} onClick={() => onChange(page - 1)}>
+        ← 較新
+      </button>
+      <span className="muted">
+        第 {page + 1} / {pageCount} 頁
+      </span>
+      <button type="button" disabled={page === pageCount - 1} onClick={() => onChange(page + 1)}>
+        較舊 →
+      </button>
+    </div>
+  );
+}
+
 export function DailyAnalysisList({ rows }: { rows: PredictionAccuracyRow[] }) {
-  if (rows.length === 0) {
+  const [page, setPage] = useState(0);
+
+  const byDate = useMemo(() => {
+    const m = new Map<string, PredictionAccuracyRow[]>();
+    for (const row of rows) {
+      const list = m.get(row.trade_date) ?? [];
+      list.push(row);
+      m.set(row.trade_date, list);
+    }
+    return m;
+  }, [rows]);
+
+  const dates = useMemo(
+    () => Array.from(byDate.keys()).sort((a, b) => (a < b ? 1 : -1)),
+    [byDate]
+  );
+
+  if (dates.length === 0) {
     return <p className="muted">目前沒有分析紀錄。</p>;
   }
 
-  const byDate = new Map<string, PredictionAccuracyRow[]>();
-  for (const row of rows) {
-    const list = byDate.get(row.trade_date) ?? [];
-    list.push(row);
-    byDate.set(row.trade_date, list);
-  }
-  const dates = Array.from(byDate.keys()).sort((a, b) => (a < b ? 1 : -1));
+  const pageCount = Math.ceil(dates.length / DATES_PER_PAGE);
+  const safePage = Math.min(page, pageCount - 1);
+  const pagedDates = dates.slice(safePage * DATES_PER_PAGE, (safePage + 1) * DATES_PER_PAGE);
 
   return (
     <div>
-      {dates.map((date) => {
+      <Pager page={safePage} pageCount={pageCount} onChange={setPage} />
+      {pagedDates.map((date) => {
         const sessions = [...byDate.get(date)!].sort(
           (a, b) => (SESSION_ORDER[a.session] ?? 99) - (SESSION_ORDER[b.session] ?? 99)
         );
         return (
           <section key={date} className="daily-date-group">
-            <h2 className="daily-date-heading">{date}</h2>
+            <h2 className="daily-date-heading">
+              {date} <span className="daily-weekday">週{weekdayLabel(date)}</span>
+            </h2>
             {sessions.map((row) => (
               <SessionCard key={row.session} row={row} />
             ))}
           </section>
         );
       })}
+      <Pager page={safePage} pageCount={pageCount} onChange={setPage} />
     </div>
   );
 }
