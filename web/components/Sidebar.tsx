@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const NAV_ITEMS = [
   { href: "/", label: "管線健康" },
   { href: "/calls", label: "決策稽核鏈" },
+  { href: "/daily", label: "每日分析" },
   { href: "/rules", label: "規則驗證 / Regime" },
   { href: "/graph", label: "供應鏈圖" },
 ];

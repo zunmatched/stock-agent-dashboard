@@ -37,5 +37,7 @@ class PredictionAccuracyRow(BaseModel):
     predicted_direction: str | None
     confidence: float | None
     actual_direction: str | None
+    actual_change_pct: float | None
     is_correct: bool | None
     review_note: str | None
+    prediction_text: str | None

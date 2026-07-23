@@ -200,6 +200,37 @@ body {
   margin-right: 0.25rem;
 }
 
+.daily-date-group {
+  margin-top: 2rem;
+}
+
+.daily-date-heading {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.daily-session-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.daily-session-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+}
+
+.daily-session-text {
+  margin: 0.5rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
 .review-toggle-cell {
   display: inline-flex;
   align-items: center;
@@ -382,7 +413,8 @@ body {
   .job-table th,
   .job-table td,
   .sidebar,
-  .graph-detail-panel {
+  .graph-detail-panel,
+  .daily-session-card {
     border-color: #27272a;
   }
   .graph-detail-panel {
