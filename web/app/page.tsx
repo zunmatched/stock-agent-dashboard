@@ -65,7 +65,11 @@ export default function HomePage() {
 
       {newsSources && (
         <section>
-          <h2>新聞來源抓取趨勢</h2>
+          <h2>新聞來源每次抓取筆數</h2>
+          <p className="muted">
+            每個來源這次抓取「回傳了幾筆」（多數來源固定回傳最新一頁，筆數本來就會穩定不變），
+            重點是看有沒有某個來源掉到 0——那才是來源真的掛掉的訊號，不是用來看新聞量趨勢的。
+          </p>
           <NewsSourceChart runs={newsSources} />
         </section>
       )}
