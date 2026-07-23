@@ -1,4 +1,6 @@
-import { Fragment } from "react";
+"use client";
+
+import { Fragment, useState } from "react";
 
 import type { PredictionAccuracyRow } from "@/lib/api";
 
@@ -6,6 +8,20 @@ export function PredictionAccuracyWidget({ rows }: { rows: PredictionAccuracyRow
   const evaluated = rows.filter((r) => r.is_correct !== null);
   const correct = evaluated.filter((r) => r.is_correct).length;
   const rate = evaluated.length ? correct / evaluated.length : null;
+
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+
+  const toggle = (key: string) => {
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+      return next;
+    });
+  };
 
   return (
     <div>
@@ -31,41 +47,54 @@ export function PredictionAccuracyWidget({ rows }: { rows: PredictionAccuracyRow
             </tr>
           </thead>
           <tbody>
-            {rows.slice(0, 12).map((r, i) => (
-              <Fragment key={`${r.trade_date}-${r.session}-${i}`}>
-                <tr>
-                  <td>{r.trade_date}</td>
-                  <td>{r.session}</td>
-                  <td>{r.predicted_direction ?? "—"}</td>
-                  <td>{r.confidence ?? "—"}</td>
-                  <td>{r.actual_direction ?? "尚未結算"}</td>
-                  <td>
-                    {r.is_correct === null ? (
-                      <span className="badge badge-unknown">待定</span>
-                    ) : r.is_correct ? (
-                      <span className="badge badge-ok">正確</span>
-                    ) : (
-                      <span className="badge badge-failed">錯誤</span>
-                    )}
-                  </td>
-                </tr>
-                {r.is_correct === false && r.review_note && (
-                  <tr className="review-note-row">
-                    <td colSpan={6}>
-                      <span className="review-note-label">檢討：</span>
-                      {r.review_note}
+            {rows.slice(0, 12).map((r, i) => {
+              const key = `${r.trade_date}-${r.session}-${i}`;
+              const isOpen = expanded.has(key);
+              return (
+                <Fragment key={key}>
+                  <tr>
+                    <td>{r.trade_date}</td>
+                    <td>{r.session}</td>
+                    <td>{r.predicted_direction ?? "—"}</td>
+                    <td>{r.confidence ?? "—"}</td>
+                    <td>{r.actual_direction ?? "尚未結算"}</td>
+                    <td>
+                      {r.is_correct === null ? (
+                        <span className="badge badge-unknown">待定</span>
+                      ) : r.is_correct ? (
+                        <span className="badge badge-ok">正確</span>
+                      ) : (
+                        <span className="review-toggle-cell">
+                          <span className="badge badge-failed">錯誤</span>
+                          <button
+                            type="button"
+                            className="review-toggle-btn"
+                            onClick={() => toggle(key)}
+                            aria-expanded={isOpen}
+                          >
+                            {isOpen ? "收合檢討 ▴" : "查看檢討 ▾"}
+                          </button>
+                        </span>
+                      )}
                     </td>
                   </tr>
-                )}
-                {r.is_correct === false && !r.review_note && (
-                  <tr className="review-note-row">
-                    <td colSpan={6} className="muted">
-                      尚未補記失準原因與改進建議。
-                    </td>
-                  </tr>
-                )}
-              </Fragment>
-            ))}
+                  {r.is_correct === false && isOpen && (
+                    <tr className="review-note-row">
+                      <td colSpan={6}>
+                        {r.review_note ? (
+                          <>
+                            <span className="review-note-label">檢討：</span>
+                            {r.review_note}
+                          </>
+                        ) : (
+                          <span className="muted">尚未補記失準原因與改進建議。</span>
+                        )}
+                      </td>
+                    </tr>
+                  )}
+                </Fragment>
+              );
+            })}
           </tbody>
         </table>
       </div>
