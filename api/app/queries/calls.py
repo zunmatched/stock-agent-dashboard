@@ -18,7 +18,7 @@ def list_calls(status: str | None, ticker: str | None, rec_type: str | None,
 
     clause = f"WHERE {' AND '.join(where)}" if where else ""
     sql = f"""
-        SELECT id, ticker, rec_date, rec_type, strength, price_at_rec,
+        SELECT id, ticker, ticker_name, rec_date, rec_type, strength, price_at_rec,
                entry_low, entry_high, stop_loss, target1, target2,
                closed_reason, outcome_pct, excess_return, signal_tags,
                reward_risk_ratio, horizon_days

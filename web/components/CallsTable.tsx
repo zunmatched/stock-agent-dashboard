@@ -32,6 +32,7 @@ export function CallsTable({ calls }: { calls: StockCall[] }) {
           <tr>
             <th>日期</th>
             <th>代號</th>
+            <th>名稱</th>
             <th>類型</th>
             <th>訊號</th>
             <th>結果</th>
@@ -43,6 +44,7 @@ export function CallsTable({ calls }: { calls: StockCall[] }) {
             <tr key={c.id}>
               <td>{c.rec_date}</td>
               <td>{c.ticker}</td>
+              <td>{c.ticker_name ?? "—"}</td>
               <td>
                 <RecTypeBadge recType={c.rec_type} />
               </td>

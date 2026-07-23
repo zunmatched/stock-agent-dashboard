@@ -31,6 +31,7 @@ export type NewsSourceRun = {
 export type StockCall = {
   id: number;
   ticker: string;
+  ticker_name: string | null;
   rec_date: string;
   rec_type: string;
   strength: string | null;

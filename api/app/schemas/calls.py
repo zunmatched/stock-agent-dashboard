@@ -6,6 +6,7 @@ from pydantic import BaseModel
 class StockCall(BaseModel):
     id: int
     ticker: str
+    ticker_name: str | None
     rec_date: date
     rec_type: str
     strength: str | None
