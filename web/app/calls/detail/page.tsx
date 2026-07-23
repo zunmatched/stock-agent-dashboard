@@ -27,7 +27,8 @@ function DetailBody() {
   return (
     <>
       <h1>
-        {call.ticker} · {call.rec_type} · {call.rec_date}
+        {call.ticker}
+        {call.ticker_name ? ` ${call.ticker_name}` : ""} · {call.rec_type} · {call.rec_date}
       </h1>
 
       <section className="summary-row">

@@ -1,3 +1,5 @@
+from datetime import date
+
 from fastapi import APIRouter, HTTPException
 
 from app.queries import calls as q
@@ -29,18 +31,20 @@ def list_calls(
     status: str | None = None,
     ticker: str | None = None,
     rec_type: str | None = None,
-    limit: int = 50,
+    from_date: date | None = None,
+    to_date: date | None = None,
+    limit: int = 200,
 ):
     if status is not None and status not in ("open", "closed"):
         raise HTTPException(status_code=400, detail="status 只能是 open 或 closed")
-    return q.list_calls(status, ticker, rec_type, limit)
+    return q.list_calls(status, ticker, rec_type, from_date, to_date, limit)
 
 
 @router.get("/summary", response_model=CallsSummary)
-def summary():
+def summary(from_date: date | None = None, to_date: date | None = None):
     return CallsSummary(
-        by_rec_type=[_to_summary_row(r, "rec_type") for r in q.calls_summary()],
-        by_signal_tag=[_to_summary_row(r, "tag") for r in q.calls_summary_by_tag()],
+        by_rec_type=[_to_summary_row(r, "rec_type") for r in q.calls_summary(from_date, to_date)],
+        by_signal_tag=[_to_summary_row(r, "tag") for r in q.calls_summary_by_tag(from_date, to_date)],
     )
 
 

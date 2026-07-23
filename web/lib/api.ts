@@ -175,16 +175,33 @@ export const api = {
     getJSON<JobRun[]>(`/api/health/jobs/${jobName}/history?days=${days}`),
   newsSources: (runs = 20) =>
     getJSON<NewsSourceRun[]>(`/api/health/news-sources?runs=${runs}`),
-  listCalls: (params: { status?: string; ticker?: string; rec_type?: string; limit?: number } = {}) => {
+  listCalls: (
+    params: {
+      status?: string;
+      ticker?: string;
+      rec_type?: string;
+      from_date?: string;
+      to_date?: string;
+      limit?: number;
+    } = {}
+  ) => {
     const qs = new URLSearchParams();
     if (params.status) qs.set("status", params.status);
     if (params.ticker) qs.set("ticker", params.ticker);
     if (params.rec_type) qs.set("rec_type", params.rec_type);
-    qs.set("limit", String(params.limit ?? 50));
+    if (params.from_date) qs.set("from_date", params.from_date);
+    if (params.to_date) qs.set("to_date", params.to_date);
+    qs.set("limit", String(params.limit ?? 200));
     return getJSON<StockCall[]>(`/api/calls?${qs.toString()}`);
   },
   callDetail: (id: number) => getJSON<CallDetail>(`/api/calls/${id}`),
-  callsSummary: () => getJSON<CallsSummary>("/api/calls/summary"),
+  callsSummary: (params: { from_date?: string; to_date?: string } = {}) => {
+    const qs = new URLSearchParams();
+    if (params.from_date) qs.set("from_date", params.from_date);
+    if (params.to_date) qs.set("to_date", params.to_date);
+    const suffix = qs.toString() ? `?${qs.toString()}` : "";
+    return getJSON<CallsSummary>(`/api/calls/summary${suffix}`);
+  },
   rules: () => getJSON<RuleSummary[]>("/api/rules"),
   ruleHistory: (ruleName: string) =>
     getJSON<RegimeHistoryPoint[]>(`/api/rules/${encodeURIComponent(ruleName)}/history`),

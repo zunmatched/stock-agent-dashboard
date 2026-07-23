@@ -1,7 +1,10 @@
+from datetime import date
+
 from app.db import query
 
 
 def list_calls(status: str | None, ticker: str | None, rec_type: str | None,
+                from_date: date | None, to_date: date | None,
                 limit: int) -> list[dict]:
     where = []
     params: list = []
@@ -15,6 +18,12 @@ def list_calls(status: str | None, ticker: str | None, rec_type: str | None,
     if rec_type:
         where.append("rec_type = %s")
         params.append(rec_type)
+    if from_date:
+        where.append("rec_date >= %s")
+        params.append(from_date)
+    if to_date:
+        where.append("rec_date <= %s")
+        params.append(to_date)
 
     clause = f"WHERE {' AND '.join(where)}" if where else ""
     sql = f"""
@@ -95,35 +104,53 @@ def snapshots_on(ticker: str, trade_date) -> list[dict]:
     )
 
 
-def calls_summary() -> list[dict]:
+def calls_summary(from_date: date | None, to_date: date | None) -> list[dict]:
     """依 rec_type 分組的勝率/平均超額報酬（只算已結案的）。"""
+    where = ["closed_reason IS NOT NULL"]
+    params: list = []
+    if from_date:
+        where.append("rec_date >= %s")
+        params.append(from_date)
+    if to_date:
+        where.append("rec_date <= %s")
+        params.append(to_date)
     return query(
-        """
+        f"""
         SELECT rec_type,
                COUNT(*) AS n,
                COUNT(*) FILTER (WHERE outcome_pct > 0) AS wins,
                ROUND(AVG(outcome_pct), 2) AS avg_outcome_pct,
                ROUND(AVG(excess_return), 2) AS avg_excess_return
         FROM dashboard.v_stock_calls
-        WHERE closed_reason IS NOT NULL
+        WHERE {' AND '.join(where)}
         GROUP BY rec_type
         ORDER BY rec_type
-        """
+        """,
+        tuple(params),
     )
 
 
-def calls_summary_by_tag() -> list[dict]:
+def calls_summary_by_tag(from_date: date | None, to_date: date | None) -> list[dict]:
     """依 signal_tags 展開分組（一筆 call 可能有多個 tag，各自計入）。"""
+    where = ["closed_reason IS NOT NULL"]
+    params: list = []
+    if from_date:
+        where.append("rec_date >= %s")
+        params.append(from_date)
+    if to_date:
+        where.append("rec_date <= %s")
+        params.append(to_date)
     return query(
-        """
+        f"""
         SELECT tag,
                COUNT(*) AS n,
                COUNT(*) FILTER (WHERE outcome_pct > 0) AS wins,
                ROUND(AVG(outcome_pct), 2) AS avg_outcome_pct,
                ROUND(AVG(excess_return), 2) AS avg_excess_return
         FROM dashboard.v_stock_calls, UNNEST(signal_tags) AS tag
-        WHERE closed_reason IS NOT NULL
+        WHERE {' AND '.join(where)}
         GROUP BY tag
         ORDER BY tag
-        """
+        """,
+        tuple(params),
     )
