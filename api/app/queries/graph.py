@@ -7,5 +7,6 @@ def all_nodes() -> list[dict]:
 
 def all_edges() -> list[dict]:
     return query(
-        "SELECT source_id, target_id, rel_type, edge_label FROM dashboard.v_graph_edges"
+        "SELECT source_id, target_id, rel_type, edge_label, magnitude, rationale "
+        "FROM dashboard.v_graph_edges"
     )

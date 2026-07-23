@@ -139,6 +139,8 @@ export type GraphEdge = {
   target_id: string;
   rel_type: string;
   edge_label: string | null;
+  magnitude: number | null;
+  rationale: string | null;
 };
 
 export type Graph = {

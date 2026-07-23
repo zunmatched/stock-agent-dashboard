@@ -12,6 +12,8 @@ class GraphEdge(BaseModel):
     target_id: str
     rel_type: str
     edge_label: str | None
+    magnitude: int | None
+    rationale: str | None
 
 
 class Graph(BaseModel):

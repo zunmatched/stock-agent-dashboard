@@ -335,13 +335,64 @@ body {
   display: inline-block;
 }
 
+.graph-detail-panel {
+  position: relative;
+  margin-top: 1rem;
+  padding: 1rem 2.5rem 1rem 1.25rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  background: #f9fafb;
+  font-size: 0.9rem;
+}
+
+.graph-detail-panel p {
+  margin: 0.35rem 0;
+}
+
+.graph-detail-related {
+  margin: 0.5rem 0 0;
+  padding-left: 1.1rem;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.graph-detail-related li {
+  margin: 0.2rem 0;
+}
+
+.graph-detail-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.graph-detail-close:hover {
+  color: #111827;
+}
+
 @media (prefers-color-scheme: dark) {
   .stat-card,
   .rule-card,
   .job-table th,
   .job-table td,
-  .sidebar {
+  .sidebar,
+  .graph-detail-panel {
     border-color: #27272a;
+  }
+  .graph-detail-panel {
+    background: #18181b;
+  }
+  .graph-detail-close {
+    color: #a1a1aa;
+  }
+  .graph-detail-close:hover {
+    color: #e4e4e7;
   }
   .sidebar-link:hover {
     background: #1f2937;

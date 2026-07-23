@@ -43,8 +43,8 @@ export default function GraphPage() {
       {graph && (
         <>
           <p className="muted">
-            {graph.nodes.length} 個節點、{graph.edges.length} 條關係。滑鼠移到節點/連線上看細節，
-            可拖曳、滾輪縮放。
+            {graph.nodes.length} 個節點、{graph.edges.length} 條關係。點擊節點或連線看詳細內容
+            （事件影響類的連線會顯示強度與原因），可拖曳、滾輪縮放。
           </p>
           <SupplyChainGraph graph={graph} />
         </>
