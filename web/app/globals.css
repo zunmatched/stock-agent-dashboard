@@ -180,6 +180,18 @@ body {
   border-bottom: 1px solid #e5e7eb;
 }
 
+.review-note-row td {
+  background: #fefce8;
+  font-size: 0.85rem;
+  padding-top: 0.4rem;
+  padding-bottom: 0.6rem;
+}
+
+.review-note-label {
+  font-weight: 600;
+  margin-right: 0.25rem;
+}
+
 .badge {
   display: inline-block;
   padding: 0.15rem 0.6rem;
@@ -309,6 +321,9 @@ body {
   .sidebar-link.active {
     background: #312e81;
     color: #c7d2fe;
+  }
+  .review-note-row td {
+    background: #292524;
   }
 }
 

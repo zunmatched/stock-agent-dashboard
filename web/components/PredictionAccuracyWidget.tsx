@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 import type { PredictionAccuracyRow } from "@/lib/api";
 
 export function PredictionAccuracyWidget({ rows }: { rows: PredictionAccuracyRow[] }) {
@@ -30,22 +32,39 @@ export function PredictionAccuracyWidget({ rows }: { rows: PredictionAccuracyRow
           </thead>
           <tbody>
             {rows.slice(0, 12).map((r, i) => (
-              <tr key={`${r.trade_date}-${r.session}-${i}`}>
-                <td>{r.trade_date}</td>
-                <td>{r.session}</td>
-                <td>{r.predicted_direction ?? "—"}</td>
-                <td>{r.confidence ?? "—"}</td>
-                <td>{r.actual_direction ?? "尚未結算"}</td>
-                <td>
-                  {r.is_correct === null ? (
-                    <span className="badge badge-unknown">待定</span>
-                  ) : r.is_correct ? (
-                    <span className="badge badge-ok">正確</span>
-                  ) : (
-                    <span className="badge badge-failed">錯誤</span>
-                  )}
-                </td>
-              </tr>
+              <Fragment key={`${r.trade_date}-${r.session}-${i}`}>
+                <tr>
+                  <td>{r.trade_date}</td>
+                  <td>{r.session}</td>
+                  <td>{r.predicted_direction ?? "—"}</td>
+                  <td>{r.confidence ?? "—"}</td>
+                  <td>{r.actual_direction ?? "尚未結算"}</td>
+                  <td>
+                    {r.is_correct === null ? (
+                      <span className="badge badge-unknown">待定</span>
+                    ) : r.is_correct ? (
+                      <span className="badge badge-ok">正確</span>
+                    ) : (
+                      <span className="badge badge-failed">錯誤</span>
+                    )}
+                  </td>
+                </tr>
+                {r.is_correct === false && r.review_note && (
+                  <tr className="review-note-row">
+                    <td colSpan={6}>
+                      <span className="review-note-label">檢討：</span>
+                      {r.review_note}
+                    </td>
+                  </tr>
+                )}
+                {r.is_correct === false && !r.review_note && (
+                  <tr className="review-note-row">
+                    <td colSpan={6} className="muted">
+                      尚未補記失準原因與改進建議。
+                    </td>
+                  </tr>
+                )}
+              </Fragment>
             ))}
           </tbody>
         </table>

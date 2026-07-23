@@ -29,7 +29,7 @@ def prediction_accuracy(days: int) -> list[dict]:
     return query(
         """
         SELECT trade_date, session, predicted_direction, confidence,
-               actual_direction, is_correct
+               actual_direction, is_correct, review_note
         FROM dashboard.v_prediction_accuracy
         WHERE trade_date >= CURRENT_DATE - %s
         ORDER BY trade_date DESC, session DESC

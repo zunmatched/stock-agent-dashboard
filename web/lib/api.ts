@@ -152,6 +152,7 @@ export type PredictionAccuracyRow = {
   confidence: number | null;
   actual_direction: string | null;
   is_correct: boolean | null;
+  review_note: string | null;
 };
 
 async function getJSON<T>(path: string): Promise<T> {

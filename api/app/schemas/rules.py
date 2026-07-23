@@ -38,3 +38,4 @@ class PredictionAccuracyRow(BaseModel):
     confidence: float | None
     actual_direction: str | None
     is_correct: bool | None
+    review_note: str | None
