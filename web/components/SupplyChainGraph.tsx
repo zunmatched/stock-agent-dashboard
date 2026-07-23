@@ -94,8 +94,29 @@ export function SupplyChainGraph({ graph }: { graph: Graph }) {
             const node = n as { display_name: string; label: string };
             return `${node.display_name}（${node.label}）— 點擊看詳細`;
           }}
-          nodeColor={(n: unknown) => LABEL_COLORS[(n as { label: string }).label] ?? "#9ca3af"}
-          nodeRelSize={4}
+          // 自訂畫節點：預設圓點跟穿過的連線同一畫面容易糊在一起，補一圈白色外框把
+          // 節點邊界跟背後的線分開。nodePointerAreaPaint 畫一個略大的隱形命中區，
+          // 讓點擊偵測不會因為改成自訂繪製而失準。
+          nodeCanvasObject={(n: unknown, ctx: CanvasRenderingContext2D, globalScale: number) => {
+            const node = n as { x?: number; y?: number; label: string };
+            if (node.x === undefined || node.y === undefined) return;
+            const r = 4;
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, r, 0, 2 * Math.PI, false);
+            ctx.fillStyle = LABEL_COLORS[node.label] ?? "#9ca3af";
+            ctx.fill();
+            ctx.lineWidth = 1.5 / globalScale;
+            ctx.strokeStyle = "#ffffff";
+            ctx.stroke();
+          }}
+          nodePointerAreaPaint={(n: unknown, color: string, ctx: CanvasRenderingContext2D) => {
+            const node = n as { x?: number; y?: number };
+            if (node.x === undefined || node.y === undefined) return;
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, 6, 0, 2 * Math.PI, false);
+            ctx.fillStyle = color;
+            ctx.fill();
+          }}
           linkLabel={(l: unknown) => {
             const link = l as GraphEdge;
             const meta = EDGE_TYPE_META[link.rel_type];
