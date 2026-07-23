@@ -1,12 +1,30 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 
 from fastapi import APIRouter, HTTPException
 
-from app.job_cadence import EXPECTED_MAX_GAP_HOURS, JOB_CADENCE_LABEL, JOB_DISPLAY_NAME
+from app.job_cadence import (
+    EXPECTED_MAX_GAP_HOURS,
+    JOB_ACTIVE_WINDOW_HOURS,
+    JOB_CADENCE_LABEL,
+    JOB_DISPLAY_NAME,
+)
 from app.queries import health as q
 from app.schemas.health import HealthOverview, JobRun, JobStatus, NewsSourceRun
 
 router = APIRouter(prefix="/api/health", tags=["health"])
+
+_TAIPEI = ZoneInfo("Asia/Taipei")
+
+
+def _most_recent_window_start(now_taipei: datetime, start_hour: int) -> datetime:
+    """最近一個已經過去、且落在平日的時段起始時間（不含週末）。"""
+    candidate = now_taipei.replace(hour=start_hour, minute=0, second=0, microsecond=0)
+    if now_taipei < candidate:
+        candidate -= timedelta(days=1)
+    while candidate.weekday() >= 5:  # 5=六, 6=日
+        candidate -= timedelta(days=1)
+    return candidate
 
 
 def _is_overdue(job_name: str, last_run_at: datetime | None) -> bool:
@@ -15,6 +33,17 @@ def _is_overdue(job_name: str, last_run_at: datetime | None) -> bool:
     max_gap = EXPECTED_MAX_GAP_HOURS.get(job_name)
     if max_gap is None:
         return False
+
+    window = JOB_ACTIVE_WINDOW_HOURS.get(job_name)
+    if window is not None:
+        start_hour, end_hour = window
+        now_taipei = datetime.now(_TAIPEI)
+        if not (start_hour <= now_taipei.hour < end_hour):
+            # 時段外（收盤後/週末）：只要最近一個已過去的平日時段開始後有跑過，就不算逾期，
+            # 不用固定緩衝去量測跟現在的間隔（那段空窗本來就不排程）。
+            window_start = _most_recent_window_start(now_taipei, start_hour)
+            return last_run_at < window_start
+
     age_hours = (datetime.now(timezone.utc) - last_run_at).total_seconds() / 3600
     return age_hours > max_gap
 

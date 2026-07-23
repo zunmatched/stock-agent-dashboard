@@ -19,6 +19,16 @@ EXPECTED_MAX_GAP_HOURS: dict[str, float] = {
     "ai_closing_analysis": 30,
 }
 
+# job_name -> (起始時, 結束時) 台北時間平日內才會執行的時段（結束時是排他上界）。
+# 2026-07-23 發現 news_update 這種「時段內每小時」的 job 用 EXPECTED_MAX_GAP_HOURS 的
+# 固定緩衝（3小時）會在收盤後到隔天開盤前這段本來就不排程的空窗一路顯示假逾期警報。
+# 有設定這個窗口的 job，逾期判斷改成「時段內用正常緩衝，時段外只看『最近一個已經過去的
+# 平日時段開始時間』之後有沒有跑過」，不受夜間/週末空窗誤判；其餘只跑一天一次的 job
+# 不用設定，直接用 EXPECTED_MAX_GAP_HOURS 的緩衝就足夠涵蓋一整天。
+JOB_ACTIVE_WINDOW_HOURS: dict[str, tuple[int, int]] = {
+    "news_update": (7, 18),
+}
+
 # job_name -> 人看得懂的預期執行頻率（不是 EXPECTED_MAX_GAP_HOURS 那個判斷逾期用的緩衝數字，
 # 是實際排程週期本身），讓使用者一眼看出「今天沒更新」是正常還是有問題——
 # 2026-07-23 使用者反映光看逾期燈號不夠，需要知道每個 job 本來多久跑一次
