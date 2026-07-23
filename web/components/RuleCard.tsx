@@ -51,31 +51,33 @@ export function RuleCard({ rule }: { rule: RuleSummary }) {
       <h3>{rule.display_name}</h3>
       <p>{rule.description}</p>
 
-      <table className="job-table">
-        <tbody>
-          <tr>
-            <td>驗證期間</td>
-            <td>{h.window}</td>
-          </tr>
-          <tr>
-            <td>樣本 / 勝率</td>
-            <td>
-              {h.sample_n.toLocaleString()} 筆 / {(h.win_rate * 100).toFixed(1)}%
-            </td>
-          </tr>
-          <tr>
-            <td>期望值 / vs Baseline</td>
-            <td>
-              {h.expectancy_pct.toFixed(2)}% / {h.edge_vs_baseline >= 0 ? "+" : ""}
-              {h.edge_vs_baseline.toFixed(2)}
-            </td>
-          </tr>
-          <tr>
-            <td>判定</td>
-            <td>{h.verdict}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div className="table-scroll">
+        <table className="job-table">
+          <tbody>
+            <tr>
+              <td>驗證期間</td>
+              <td>{h.window}</td>
+            </tr>
+            <tr>
+              <td>樣本 / 勝率</td>
+              <td>
+                {h.sample_n.toLocaleString()} 筆 / {(h.win_rate * 100).toFixed(1)}%
+              </td>
+            </tr>
+            <tr>
+              <td>期望值 / vs Baseline</td>
+              <td>
+                {h.expectancy_pct.toFixed(2)}% / {h.edge_vs_baseline >= 0 ? "+" : ""}
+                {h.edge_vs_baseline.toFixed(2)}
+              </td>
+            </tr>
+            <tr>
+              <td>判定</td>
+              <td>{h.verdict}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <RegimeStatus rule={rule} />
 

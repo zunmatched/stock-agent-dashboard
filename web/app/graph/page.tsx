@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 
 import { api, type Graph } from "@/lib/api";
 import { SupplyChainGraph } from "@/components/SupplyChainGraph";
@@ -24,9 +23,6 @@ export default function GraphPage() {
 
   return (
     <main className="page">
-      <p>
-        <Link href="/">← 回管線健康</Link>
-      </p>
       <h1>供應鏈 / ETF / 競爭 / 事件影響圖</h1>
       <p className="muted">
         來自私有系統 Neo4j 圖資料庫的每日匯出快照（最多 24 小時舊）。這裡只顯示主動建立的

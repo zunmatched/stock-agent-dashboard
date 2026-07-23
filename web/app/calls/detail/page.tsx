@@ -49,36 +49,38 @@ function DetailBody() {
 
       <section>
         <h2>進場條件</h2>
-        <table className="job-table">
-          <tbody>
-            <tr>
-              <td>進場區間</td>
-              <td>
-                {call.entry_low ?? "—"} ~ {call.entry_high ?? "—"}
-              </td>
-            </tr>
-            <tr>
-              <td>停損 / 目標</td>
-              <td>
-                {call.stop_loss ?? "—"} / {call.target1 ?? "—"}
-              </td>
-            </tr>
-            <tr>
-              <td>訊號標籤</td>
-              <td>{(call.signal_tags ?? []).join("、") || "—"}</td>
-            </tr>
-            <tr>
-              <td>Horizon</td>
-              <td>{call.horizon_days ?? "—"} 個交易日</td>
-            </tr>
-            {call.excess_return !== null && (
+        <div className="table-scroll">
+          <table className="job-table">
+            <tbody>
               <tr>
-                <td>超額報酬（vs TAIEX）</td>
-                <td>{call.excess_return.toFixed(2)}%</td>
+                <td>進場區間</td>
+                <td>
+                  {call.entry_low ?? "—"} ~ {call.entry_high ?? "—"}
+                </td>
               </tr>
-            )}
-          </tbody>
-        </table>
+              <tr>
+                <td>停損 / 目標</td>
+                <td>
+                  {call.stop_loss ?? "—"} / {call.target1 ?? "—"}
+                </td>
+              </tr>
+              <tr>
+                <td>訊號標籤</td>
+                <td>{(call.signal_tags ?? []).join("、") || "—"}</td>
+              </tr>
+              <tr>
+                <td>Horizon</td>
+                <td>{call.horizon_days ?? "—"} 個交易日</td>
+              </tr>
+              {call.excess_return !== null && (
+                <tr>
+                  <td>超額報酬（vs TAIEX）</td>
+                  <td>{call.excess_return.toFixed(2)}%</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <section>
@@ -93,26 +95,28 @@ function DetailBody() {
       {detail.snapshots.length > 0 && (
         <section>
           <h2>當天盤中快照</h2>
-          <table className="job-table">
-            <thead>
-              <tr>
-                <th>時段</th>
-                <th>即時價</th>
-                <th>漲跌%</th>
-                <th>擷取時間</th>
-              </tr>
-            </thead>
-            <tbody>
-              {detail.snapshots.map((s) => (
-                <tr key={s.session}>
-                  <td>{s.session}</td>
-                  <td>{s.price ?? "—"}</td>
-                  <td>{s.change_pct ?? "—"}</td>
-                  <td>{new Date(s.captured_at).toLocaleTimeString("zh-TW")}</td>
+          <div className="table-scroll">
+            <table className="job-table">
+              <thead>
+                <tr>
+                  <th>時段</th>
+                  <th>即時價</th>
+                  <th>漲跌%</th>
+                  <th>擷取時間</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {detail.snapshots.map((s) => (
+                  <tr key={s.session}>
+                    <td>{s.session}</td>
+                    <td>{s.price ?? "—"}</td>
+                    <td>{s.change_pct ?? "—"}</td>
+                    <td>{new Date(s.captured_at).toLocaleTimeString("zh-TW")}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </section>
       )}
     </>

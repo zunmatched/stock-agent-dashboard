@@ -16,38 +16,40 @@ export function PredictionAccuracyWidget({ rows }: { rows: PredictionAccuracyRow
         )}
         。
       </p>
-      <table className="job-table">
-        <thead>
-          <tr>
-            <th>日期</th>
-            <th>時段</th>
-            <th>預測</th>
-            <th>信心</th>
-            <th>實際</th>
-            <th>結果</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.slice(0, 12).map((r, i) => (
-            <tr key={`${r.trade_date}-${r.session}-${i}`}>
-              <td>{r.trade_date}</td>
-              <td>{r.session}</td>
-              <td>{r.predicted_direction ?? "—"}</td>
-              <td>{r.confidence ?? "—"}</td>
-              <td>{r.actual_direction ?? "尚未結算"}</td>
-              <td>
-                {r.is_correct === null ? (
-                  <span className="badge badge-unknown">待定</span>
-                ) : r.is_correct ? (
-                  <span className="badge badge-ok">正確</span>
-                ) : (
-                  <span className="badge badge-failed">錯誤</span>
-                )}
-              </td>
+      <div className="table-scroll">
+        <table className="job-table">
+          <thead>
+            <tr>
+              <th>日期</th>
+              <th>時段</th>
+              <th>預測</th>
+              <th>信心</th>
+              <th>實際</th>
+              <th>結果</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rows.slice(0, 12).map((r, i) => (
+              <tr key={`${r.trade_date}-${r.session}-${i}`}>
+                <td>{r.trade_date}</td>
+                <td>{r.session}</td>
+                <td>{r.predicted_direction ?? "—"}</td>
+                <td>{r.confidence ?? "—"}</td>
+                <td>{r.actual_direction ?? "尚未結算"}</td>
+                <td>
+                  {r.is_correct === null ? (
+                    <span className="badge badge-unknown">待定</span>
+                  ) : r.is_correct ? (
+                    <span className="badge badge-ok">正確</span>
+                  ) : (
+                    <span className="badge badge-failed">錯誤</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

@@ -23,9 +23,6 @@ export default function RulesPage() {
 
   return (
     <main className="page">
-      <p>
-        <Link href="/">← 回管線健康</Link>
-      </p>
       <h1>規則驗證 / Regime 趨勢</h1>
       <p className="muted">
         每條進場規則都先經過歷史回測驗證有正期望值才會被協議採用，之後定期在新的市場環境重新

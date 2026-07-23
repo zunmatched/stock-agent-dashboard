@@ -26,35 +26,37 @@ export function CallsTable({ calls }: { calls: StockCall[] }) {
     return <p className="muted">沒有符合條件的 call。</p>;
   }
   return (
-    <table className="job-table">
-      <thead>
-        <tr>
-          <th>日期</th>
-          <th>代號</th>
-          <th>類型</th>
-          <th>訊號</th>
-          <th>結果</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {calls.map((c) => (
-          <tr key={c.id}>
-            <td>{c.rec_date}</td>
-            <td>{c.ticker}</td>
-            <td>
-              <RecTypeBadge recType={c.rec_type} />
-            </td>
-            <td className="muted">{(c.signal_tags ?? []).join(", ")}</td>
-            <td>
-              <OutcomeCell call={c} />
-            </td>
-            <td>
-              <Link href={`/calls/detail?id=${c.id}`}>細節 →</Link>
-            </td>
+    <div className="table-scroll">
+      <table className="job-table">
+        <thead>
+          <tr>
+            <th>日期</th>
+            <th>代號</th>
+            <th>類型</th>
+            <th>訊號</th>
+            <th>結果</th>
+            <th></th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {calls.map((c) => (
+            <tr key={c.id}>
+              <td>{c.rec_date}</td>
+              <td>{c.ticker}</td>
+              <td>
+                <RecTypeBadge recType={c.rec_type} />
+              </td>
+              <td className="muted">{(c.signal_tags ?? []).join(", ")}</td>
+              <td>
+                <OutcomeCell call={c} />
+              </td>
+              <td>
+                <Link href={`/calls/detail?id=${c.id}`}>細節 →</Link>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }

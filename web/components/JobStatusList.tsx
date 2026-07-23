@@ -30,27 +30,29 @@ function formatTime(iso: string | null) {
 
 export function JobStatusList({ jobs }: { jobs: JobStatus[] }) {
   return (
-    <table className="job-table">
-      <thead>
-        <tr>
-          <th>Job</th>
-          <th>狀態</th>
-          <th>最後執行</th>
-          <th>耗時</th>
-        </tr>
-      </thead>
-      <tbody>
-        {jobs.map((job) => (
-          <tr key={job.job_name}>
-            <td>{job.display_name}</td>
-            <td>
-              <StatusBadge job={job} />
-            </td>
-            <td>{formatTime(job.last_run_at)}</td>
-            <td>{formatDuration(job.last_duration_ms)}</td>
+    <div className="table-scroll">
+      <table className="job-table">
+        <thead>
+          <tr>
+            <th>Job</th>
+            <th>狀態</th>
+            <th>最後執行</th>
+            <th>耗時</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {jobs.map((job) => (
+            <tr key={job.job_name}>
+              <td>{job.display_name}</td>
+              <td>
+                <StatusBadge job={job} />
+              </td>
+              <td>{formatTime(job.last_run_at)}</td>
+              <td>{formatDuration(job.last_duration_ms)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }

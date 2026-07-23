@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import type { Graph } from "@/lib/api";
 
@@ -29,10 +29,30 @@ export function SupplyChainGraph({ graph }: { graph: Graph }) {
     [graph]
   );
 
+  // react-force-graph-2d 沒給 width 時是用 window 尺寸，不會乖乖跟著容器寬度走，
+  // 這會讓這一頁的實際版面比其他頁面寬（頁面寬度忽寬忽窄的元凶）。改用 ResizeObserver
+  // 量容器實際寬度，強制它跟其他頁面一樣受 .page 的 max-width 約束。
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver((entries) => {
+      setWidth(entries[0].contentRect.width);
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div style={{ border: "1px solid #e5e7eb", borderRadius: "0.75rem", overflow: "hidden" }}>
+    <div
+      ref={containerRef}
+      style={{ border: "1px solid #e5e7eb", borderRadius: "0.75rem", overflow: "hidden" }}
+    >
       <ForceGraph2D
         graphData={graphData}
+        width={width || undefined}
         height={520}
         nodeId="id"
         // react-force-graph-2d's accessor generics don't survive next/dynamic's inference,

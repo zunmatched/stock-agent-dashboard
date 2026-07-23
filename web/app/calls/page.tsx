@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 
 import { api, type CallsSummary, type StockCall } from "@/lib/api";
 import { CallsTable } from "@/components/CallsTable";
@@ -26,9 +25,6 @@ export default function CallsPage() {
 
   return (
     <main className="page">
-      <p>
-        <Link href="/">← 回管線健康</Link>
-      </p>
       <h1>決策稽核鏈</h1>
       <p className="muted">每一筆個股 call 的完整脈絡：進場理由、當時股價/籌碼、最終結果。</p>
 
