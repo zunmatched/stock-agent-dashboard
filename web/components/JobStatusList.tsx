@@ -36,6 +36,7 @@ export function JobStatusList({ jobs }: { jobs: JobStatus[] }) {
           <tr>
             <th>Job</th>
             <th>狀態</th>
+            <th>預期頻率</th>
             <th>最後執行</th>
             <th>耗時</th>
           </tr>
@@ -47,6 +48,7 @@ export function JobStatusList({ jobs }: { jobs: JobStatus[] }) {
               <td>
                 <StatusBadge job={job} />
               </td>
+              <td className="muted">{job.expected_cadence}</td>
               <td>{formatTime(job.last_run_at)}</td>
               <td>{formatDuration(job.last_duration_ms)}</td>
             </tr>

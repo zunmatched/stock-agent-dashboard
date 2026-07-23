@@ -3,6 +3,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? "";
 export type JobStatus = {
   job_name: string;
   display_name: string;
+  expected_cadence: string;
   last_run_at: string | null;
   last_status: "success" | "failed" | null;
   last_duration_ms: number | null;

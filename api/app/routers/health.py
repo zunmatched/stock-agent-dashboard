@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 
 from fastapi import APIRouter, HTTPException
 
-from app.job_cadence import EXPECTED_MAX_GAP_HOURS, JOB_DISPLAY_NAME
+from app.job_cadence import EXPECTED_MAX_GAP_HOURS, JOB_CADENCE_LABEL, JOB_DISPLAY_NAME
 from app.queries import health as q
 from app.schemas.health import HealthOverview, JobRun, JobStatus, NewsSourceRun
 
@@ -28,6 +28,7 @@ def _build_job_statuses() -> list[JobStatus]:
         statuses.append(JobStatus(
             job_name=job_name,
             display_name=display_name,
+            expected_cadence=JOB_CADENCE_LABEL.get(job_name, "—"),
             last_run_at=last_run_at,
             last_status=row["status"] if row else None,
             last_duration_ms=row["duration_ms"] if row else None,

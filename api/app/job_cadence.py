@@ -19,6 +19,22 @@ EXPECTED_MAX_GAP_HOURS: dict[str, float] = {
     "ai_closing_analysis": 30,
 }
 
+# job_name -> 人看得懂的預期執行頻率（不是 EXPECTED_MAX_GAP_HOURS 那個判斷逾期用的緩衝數字，
+# 是實際排程週期本身），讓使用者一眼看出「今天沒更新」是正常還是有問題——
+# 2026-07-23 使用者反映光看逾期燈號不夠，需要知道每個 job 本來多久跑一次
+JOB_CADENCE_LABEL: dict[str, str] = {
+    "news_update": "平日每小時一次（07-17點）",
+    "premarket": "平日每天 08:00",
+    "opening": "平日每天 09:30",
+    "midday": "平日每天 11:30",
+    "daily_update": "平日每天 16:10",
+    "rec_closer": "平日每天 16:45",
+    "regime_check": "每週五 17:00",
+    "backtest_refresh": "每季一次（1/4/7/10月2日）",
+    "ai_premarket_analysis": "平日每天 08:00",
+    "ai_closing_analysis": "平日每天 18:30",
+}
+
 JOB_DISPLAY_NAME: dict[str, str] = {
     # premarket/opening/midday 都只是排程自動推送的資料摘要（抓聚合資料+發 Telegram），
     # 不呼叫 AI——2026-07-23 曾被誤讀成「AI 盤前決策分析」耗時才774ms 很可疑，其實真正

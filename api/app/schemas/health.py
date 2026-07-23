@@ -6,6 +6,7 @@ from pydantic import BaseModel
 class JobStatus(BaseModel):
     job_name: str
     display_name: str
+    expected_cadence: str
     last_run_at: datetime | None
     last_status: str | None
     last_duration_ms: int | None
