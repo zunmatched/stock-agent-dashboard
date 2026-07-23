@@ -180,6 +180,14 @@ body {
   border-bottom: 1px solid #e5e7eb;
 }
 
+.prediction-table {
+  table-layout: fixed;
+}
+
+.prediction-table td {
+  overflow-wrap: break-word;
+}
+
 .review-note-row td {
   background: #fefce8;
   font-size: 0.85rem;

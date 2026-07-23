@@ -35,7 +35,15 @@ export function PredictionAccuracyWidget({ rows }: { rows: PredictionAccuracyRow
         。
       </p>
       <div className="table-scroll">
-        <table className="job-table">
+        <table className="job-table prediction-table">
+          <colgroup>
+            <col style={{ width: "12%" }} />
+            <col style={{ width: "10%" }} />
+            <col style={{ width: "12%" }} />
+            <col style={{ width: "10%" }} />
+            <col style={{ width: "14%" }} />
+            <col style={{ width: "42%" }} />
+          </colgroup>
           <thead>
             <tr>
               <th>日期</th>
