@@ -297,6 +297,13 @@ body {
   color: #166534;
 }
 
+/* 方向猜對但過程有瑕疵——不能跟乾淨的「正確」用同一個顏色混在一起，
+   否則等於默許僥倖對的案例被當成系統真的有效 */
+.badge-ok-flawed {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
 .badge-overdue {
   background: #fef3c7;
   color: #92400e;
@@ -487,6 +494,10 @@ body {
   }
   .daily-pager button:hover:not(:disabled) {
     background: #27272a;
+  }
+  .badge-ok-flawed {
+    background: #422006;
+    color: #fde68a;
   }
   .filter-row select,
   .filter-row input[type="date"] {

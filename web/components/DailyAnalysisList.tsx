@@ -26,11 +26,14 @@ function ResultBadge({ row }: { row: PredictionAccuracyRow }) {
   if (row.is_correct === null) {
     return <span className="badge badge-unknown">尚未結算</span>;
   }
-  return row.is_correct ? (
-    <span className="badge badge-ok">正確</span>
-  ) : (
-    <span className="badge badge-failed">錯誤</span>
-  );
+  if (row.is_correct) {
+    return row.review_note ? (
+      <span className="badge badge-ok-flawed">正確・過程有瑕疵</span>
+    ) : (
+      <span className="badge badge-ok">正確</span>
+    );
+  }
+  return <span className="badge badge-failed">錯誤</span>;
 }
 
 function SessionCard({ row }: { row: PredictionAccuracyRow }) {
@@ -60,7 +63,7 @@ function SessionCard({ row }: { row: PredictionAccuracyRow }) {
 
       {row.prediction_text && <p className="daily-session-text">{row.prediction_text}</p>}
 
-      {row.is_correct === false && (
+      {(row.is_correct === false || (row.is_correct === true && row.review_note)) && (
         <div className="review-toggle-cell">
           <button
             type="button"
@@ -72,7 +75,7 @@ function SessionCard({ row }: { row: PredictionAccuracyRow }) {
           </button>
         </div>
       )}
-      {row.is_correct === false && showNote && (
+      {(row.is_correct === false || (row.is_correct === true && row.review_note)) && showNote && (
         <p className="daily-session-text">
           {row.review_note ? (
             <>

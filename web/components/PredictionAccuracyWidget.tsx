@@ -70,7 +70,21 @@ export function PredictionAccuracyWidget({ rows }: { rows: PredictionAccuracyRow
                       {r.is_correct === null ? (
                         <span className="badge badge-unknown">待定</span>
                       ) : r.is_correct ? (
-                        <span className="badge badge-ok">正確</span>
+                        r.review_note ? (
+                          <span className="review-toggle-cell">
+                            <span className="badge badge-ok-flawed">正確・過程有瑕疵</span>
+                            <button
+                              type="button"
+                              className="review-toggle-btn"
+                              onClick={() => toggle(key)}
+                              aria-expanded={isOpen}
+                            >
+                              {isOpen ? "收合檢討 ▴" : "查看檢討 ▾"}
+                            </button>
+                          </span>
+                        ) : (
+                          <span className="badge badge-ok">正確</span>
+                        )
                       ) : (
                         <span className="review-toggle-cell">
                           <span className="badge badge-failed">錯誤</span>
@@ -86,7 +100,7 @@ export function PredictionAccuracyWidget({ rows }: { rows: PredictionAccuracyRow
                       )}
                     </td>
                   </tr>
-                  {r.is_correct === false && isOpen && (
+                  {isOpen && (r.is_correct === false || (r.is_correct === true && r.review_note)) && (
                     <tr className="review-note-row">
                       <td colSpan={6}>
                         {r.review_note ? (
